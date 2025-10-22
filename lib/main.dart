@@ -31,6 +31,7 @@ class _TaskListPageState extends State<TaskListPage> {
       body: taskAppBody(),
     );
 
+  // MNetodo para criar o appBar da Pagina de Lista de Tarefas
   AppBar taskAppBar(){
     return AppBar(
         title: Center(child: Text("Lista de Tarefas"),
@@ -41,6 +42,7 @@ class _TaskListPageState extends State<TaskListPage> {
   // Segunda opção de fazer a função
   // AppBar taskAppBar() => AppBar(title: Center(child: Text("Lista de Tarefas")));
 
+  // MNetodo para criar o Botão da Pagina de Lista de Tarefas
   FloatingActionButton taskAppFloatingActionButton() {
     return FloatingActionButton(
         child: Icon(Icons.add),
@@ -58,6 +60,7 @@ class _TaskListPageState extends State<TaskListPage> {
   //     );
   // }
 
+  // MNetodo para criar o Body para Listar de Tarefas
   // Segunda Forma de Escrever
   Widget taskAppBody() => Column(
         children: [
