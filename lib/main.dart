@@ -64,9 +64,26 @@ class _TaskListPageState extends State<TaskListPage> {
   // Segunda Forma de Escrever
   Widget taskAppBody() => Column(
         children: [
-          // Dashboard
+          // Dashboard (taskAppDashBoard())
+
           // Lista de Tarefas
+          Expanded(child: 
+              ListView.builder(
+                itemBuilder: (context, index) => ListTile(
+                title: Text("Kaue"),
+              )
+            )
+          ),
         ],
       );
+}
 
+
+class TaskModel {
+  String title;
+  bool done;
+
+  TaskModel({required this.title, this.done = false});
+
+  void changeDoneValue() => done = !done;
 }
