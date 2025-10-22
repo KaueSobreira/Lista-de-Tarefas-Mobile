@@ -25,16 +25,45 @@ class TaskListPage extends StatefulWidget {
 // classe responsavel implementar o gerenciamento do Estado da TasklistPage
 class _TaskListPageState extends State<TaskListPage> {
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+  Widget build(BuildContext context) => Scaffold(
+      appBar: taskAppBar(),
+      floatingActionButton: taskAppFloatingActionButton(),
+      body: taskAppBody(),
+    );
+
+  AppBar taskAppBar(){
+    return AppBar(
         title: Center(child: Text("Lista de Tarefas"),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {}),
-      body: null,
-    );
+      );
   }
+
+  // Segunda opção de fazer a função
+  // AppBar taskAppBar() => AppBar(title: Center(child: Text("Lista de Tarefas")));
+
+  FloatingActionButton taskAppFloatingActionButton() {
+    return FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {}
+        );
+  }
+
+  // Primeira Forma de Escrever
+  // Widget taskAppBody() {
+  //   return Column(
+  //       children: [
+  //         // Dashboard
+  //         // Lista de Tarefas
+  //       ],
+  //     );
+  // }
+
+  // Segunda Forma de Escrever
+  Widget taskAppBody() => Column(
+        children: [
+          // Dashboard
+          // Lista de Tarefas
+        ],
+      );
+
 }
