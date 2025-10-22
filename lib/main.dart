@@ -27,8 +27,13 @@ class _TaskListPageState extends State<TaskListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: null,
-      floatingActionButton: null,
+      appBar: AppBar(
+        title: Center(child: Text("Lista de Tarefas"),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {}),
       body: null,
     );
   }
