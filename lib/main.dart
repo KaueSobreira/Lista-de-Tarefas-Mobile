@@ -80,30 +80,38 @@ class _TaskListPageState extends State<TaskListPage> {
                 itemBuilder: (context, index) {
                   final TaskModel task = tasks[index]; 
                   return ListTile(
-                    leading: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          task.changeDoneValue();
-                        });
-                      }, 
-                      icon: Icon(
-                        task.done ? Icons.check_circle
-                        : Icons.flaky_sharp,
-                        color: task.done ? Colors.green 
-                        : Colors.red,
-                      ), ),
-                    trailing: IconButton(onPressed: () {
-                      setState(() {
-                        tasks.removeAt(index);
-                      });
-                    },
-                     icon: Icon(Icons.delete)),
+                    leading: listTileLeadingWidget(task),
+                    trailing: listItemTrailingWidget(index),
                     title: Text(task.title));
                 },
               ),
             ),
         ],
       );
+
+  IconButton listItemTrailingWidget(int index) {
+    return IconButton(onPressed: () {
+                    setState(() {
+                      tasks.removeAt(index);
+                    });
+                  },
+                   icon: Icon(Icons.delete));
+  }
+
+  IconButton listTileLeadingWidget(TaskModel task) {
+    return IconButton(
+                    onPressed: () {
+                      setState(() {
+                        task.changeDoneValue();
+                      });
+                    }, 
+                    icon: Icon(
+                      task.done ? Icons.check_circle
+                      : Icons.flaky_sharp,
+                      color: task.done ? Colors.green 
+                      : Colors.red,
+                    ), );
+  }
 }
 
 
