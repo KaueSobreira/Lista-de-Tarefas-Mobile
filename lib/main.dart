@@ -88,11 +88,16 @@ class _TaskListPageState extends State<TaskListPage> {
                       }, 
                       icon: Icon(
                         task.done ? Icons.check_circle
-                        : Icons.circle_outlined,
+                        : Icons.flaky_sharp,
                         color: task.done ? Colors.green 
-                        : Colors.blueGrey,
+                        : Colors.red,
                       ), ),
-                    trailing: null,
+                    trailing: IconButton(onPressed: () {
+                      setState(() {
+                        tasks.removeAt(index);
+                      });
+                    },
+                     icon: Icon(Icons.delete)),
                     title: Text(task.title));
                 },
               ),
