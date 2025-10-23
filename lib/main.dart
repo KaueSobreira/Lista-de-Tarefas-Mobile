@@ -53,8 +53,34 @@ class _TaskListPageState extends State<TaskListPage> {
   FloatingActionButton taskAppFloatingActionButton() {
     return FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () {}
-        );
+        onPressed: createTaskDialog());
+  }
+  VoidCallback createTaskDialog() {
+
+    return () {
+      showDialog(
+        context: context, 
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Adicionar Tarefa"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField (
+                  decoration: InputDecoration
+                  (hintText: "Digite sua Tarefa"),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(onPressed: () {},
+               child: Text("Cancelar")),
+               TextButton(onPressed: () {},
+               child: Text("Adicionar"))
+            ],
+          );
+        });
+    };
   }
 
   // Primeira Forma de Escrever
@@ -83,11 +109,11 @@ class _TaskListPageState extends State<TaskListPage> {
                     leading: listTileLeadingWidget(task),
                     trailing: listItemTrailingWidget(index),
                     title: Text(task.title));
-                },
-              ),
+                  },
+                ),
             ),
-        ],
-      );
+          ],
+        );
 
   IconButton listItemTrailingWidget(int index) {
     return IconButton(onPressed: () {
