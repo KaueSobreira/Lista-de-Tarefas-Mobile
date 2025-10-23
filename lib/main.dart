@@ -24,6 +24,13 @@ class TaskListPage extends StatefulWidget {
 
 // classe responsavel implementar o gerenciamento do Estado da TasklistPage
 class _TaskListPageState extends State<TaskListPage> {
+  final List<TaskModel> tasks = [
+    TaskModel(title: "Busca o Cafézin"),
+    TaskModel(title: "Ir para Academia"),
+    TaskModel(title: "Limpa a Casa"),
+  ];
+  
+
   @override
   Widget build(BuildContext context) => Scaffold(
       appBar: taskAppBar(),
@@ -69,11 +76,27 @@ class _TaskListPageState extends State<TaskListPage> {
           // Lista de Tarefas
           Expanded(child: 
               ListView.builder(
-                itemBuilder: (context, index) => ListTile(
-                title: Text("Kaue"),
-              )
-            )
-          ),
+                itemCount: tasks.length,
+                itemBuilder: (context, index) {
+                  final TaskModel task = tasks[index]; 
+                  return ListTile(
+                    leading: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          task.changeDoneValue();
+                        });
+                      }, 
+                      icon: Icon(
+                        task.done ? Icons.check_circle
+                        : Icons.circle_outlined,
+                        color: task.done ? Colors.green 
+                        : Colors.blueGrey,
+                      ), ),
+                    trailing: null,
+                    title: Text(task.title));
+                },
+              ),
+            ),
         ],
       );
 }
