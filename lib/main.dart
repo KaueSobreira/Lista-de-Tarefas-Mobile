@@ -1,137 +1,126 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(TaskApp());
+  runApp(const TaskApp());
 }
 
-// Classe responsavel por implementar a abstracao do MaterialAPP
+//Classe Responsável por implementar a abstração de MaterialApp
 class TaskApp extends StatelessWidget {
   const TaskApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(home: TaskListPage());  
+  Widget build(BuildContext context){
+    return MaterialApp(home: TaskListPage());
   }
 }
 
-// Classe responsavel implementar a representação da Pagina dinamica de lista de tarefas
+
+//Classe Responsável por implementar a representação da página Dinâmica de Lista de Tarefas
 class TaskListPage extends StatefulWidget {
   const TaskListPage({super.key});
 
-  @override
-  State<TaskListPage> createState() => _TaskListPageState();
+  @override 
+    State<TaskListPage> createState() => _TaskListPageState();
 }
 
-// classe responsavel implementar o gerenciamento do Estado da TasklistPage
+
+//Classe Responsável por implementar o gerenciamento do Estado da página "TaskListPage"
 class _TaskListPageState extends State<TaskListPage> {
   final List<TaskModel> tasks = [
-    TaskModel(title: "Busca o Cafézin"),
-    TaskModel(title: "Ir para Academia"),
-    TaskModel(title: "Limpa a Casa"),
+    TaskModel(title: "Preparar conteúdo da Aula"),
+    TaskModel(title: "Jogar Cszin"),
+    TaskModel(title: "Arrumar as contas para Pagar"),
   ];
-  
 
   @override
   Widget build(BuildContext context) => Scaffold(
       appBar: taskAppBar(),
       floatingActionButton: taskAppFloatingActionButton(),
-      body: taskAppBody(),
+      body: taskAppBody()
     );
 
-  // MNetodo para criar o appBar da Pagina de Lista de Tarefas
-  AppBar taskAppBar(){
-    return AppBar(
-        title: Center(child: Text("Lista de Tarefas"),
-        ),
-      );
-  }
 
-  // Segunda opção de fazer a função
-  // AppBar taskAppBar() => AppBar(title: Center(child: Text("Lista de Tarefas")));
 
-  // MNetodo para criar o Botão da Pagina de Lista de Tarefas
-  FloatingActionButton taskAppFloatingActionButton() {
-    return FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: createTaskDialog());
-  }
-  VoidCallback createTaskDialog() {
+  //Metodo responsabel por criar o AppBar da Pagina Lista de Tarefas
+  AppBar taskAppBar() => AppBar(title: Center(child: Text("Lista de Tarefas")));
+  //Metodo responsabel por criar o FloatingActionButton da Pagina Lista de Tarefas
+  FloatingActionButton taskAppFloatingActionButton() => FloatingActionButton(child: Icon(Icons.add),onPressed: createTaskDialog());
 
-    return () {
+  VoidCallback createTaskDialog(){
+    TextField  textFieldTaskTitle = TextField(
+      controller: TextEditingController(),
+      decoration: InputDecoration(hintText: "Digite a Tarefa")
+    );
+
+    return (){
       showDialog(
         context: context, 
         builder: (context) {
-          return AlertDialog(
-            title: Text("Adicionar Tarefa"),
+          return AlertDialog(title: Text("Adicionar Tarefa"),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                TextField (
-                  decoration: InputDecoration
-                  (hintText: "Digite sua Tarefa"),
-                ),
+                textFieldTaskTitle
               ],
             ),
             actions: [
-              TextButton(onPressed: () {},
-               child: Text("Cancelar")),
-               TextButton(onPressed: () {},
-               child: Text("Adicionar"))
+              TextButton(onPressed: (){
+                Navigator.of(context).pop();
+              }, child: Text("Cancelar")),
+              TextButton(onPressed: (){
+                setState(() {
+                  String taskTitle = textFieldTaskTitle.controller!.text;
+                if (taskTitle.isEmpty) return;
+
+                tasks.add(TaskModel(title: taskTitle));
+                Navigator.of(context).pop();
+                });
+
+                
+              }, child: Text("Adicionar")),
             ],
-          );
-        });
+            );
+        }
+      );
     };
   }
 
-  // Primeira Forma de Escrever
-  // Widget taskAppBody() {
-  //   return Column(
-  //       children: [
-  //         // Dashboard
-  //         // Lista de Tarefas
-  //       ],
-  //     );
-  // }
-
-  // MNetodo para criar o Body para Listar de Tarefas
-  // Segunda Forma de Escrever
-  Widget taskAppBody() => Column(
-        children: [
-          // Dashboard (taskAppDashBoard())
-
-          // Lista de Tarefas
-          Expanded(child: 
-              ListView.builder(
-                itemCount: tasks.length,
-                itemBuilder: (context, index) {
-                  final TaskModel task = tasks[index]; 
-                  return ListTile(
-                    leading: listTileLeadingWidget(task),
-                    trailing: listItemTrailingWidget(index),
-                    title: Text(task.title));
-                  },
-                ),
-            ),
-          ],
+  //Metodo responsabel por criar o conteudo (body) da página Lista de Tarefas
+  Widget taskAppBody() => Column(children: [
+    Expanded(child: ListView.builder(
+      itemCount: tasks.length,
+      itemBuilder: (context, index) {
+        final TaskModel task = tasks[index];
+        return ListTile(
+          leading: listTileLeadingWidget(task), 
+          trailing: listItemTrailingWidget(index),
+          title: Text(task.title)
         );
+      }
+    ),
+    ),
+  ],
+  );
 
   IconButton listItemTrailingWidget(int index) {
-    return IconButton(onPressed: () {
-                    setState(() {
-                      tasks.removeAt(index);
-                    });
-                  },
-                   icon: Icon(Icons.delete));
+    return IconButton(
+          onPressed: (){
+            setState(() {
+              tasks.removeAt(index);
+            });
+          }, 
+          icon: Icon(Icons.delete)
+        );
   }
 
   IconButton listTileLeadingWidget(TaskModel task) {
     return IconButton(
-                    onPressed: () {
-                      setState(() {
-                        task.changeDoneValue();
-                      });
-                    }, 
-                    icon: Icon(
+          onPressed: (){
+            setState(() {
+              task.changeDoneValue();
+            });
+          },
+         icon: Icon(
                       task.done ? Icons.check_circle
                       : Icons.flaky_sharp,
                       color: task.done ? Colors.green 
@@ -140,8 +129,7 @@ class _TaskListPageState extends State<TaskListPage> {
   }
 }
 
-
-class TaskModel {
+class TaskModel{
   String title;
   bool done;
 
