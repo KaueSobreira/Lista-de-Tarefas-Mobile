@@ -86,8 +86,41 @@ class _TaskListPageState extends State<TaskListPage> {
   }
 
   //Metodo responsabel por criar o conteudo (body) da página Lista de Tarefas
-  Widget taskAppBody() => Column(children: [
-    Expanded(child: ListView.builder(
+  Widget taskAppBody() => Column(
+    children: [
+        // dashboard
+        tasksDashboard(),
+        Expanded(child: tasksListView(),
+      ),
+    ],
+  );
+
+  Widget tasksDashboard() => Row(
+    children: [
+      // Contador/Indicador de Tarefas
+      Padding(
+        padding: EdgeInsets.fromLTRB(16, 0, 8, 0), 
+        child: Text(
+          "(${tasks.where((tasks) => tasks.done).length}/${tasks.length})",
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+      ),
+      
+      // progressbar
+      Expanded(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(8, 0, 16, 0),
+          child: LinearProgressIndicator(
+            value: tasks.where((tasks) => tasks.done).length / tasks.length,
+            // valueColor: AlwaysStoppedAnimation(Colors.green)
+            color: Colors.green,
+          ),
+        ),
+      ),
+    ],
+  );
+
+  Widget tasksListView() => ListView.builder(
       itemCount: tasks.length,
       itemBuilder: (context, index) {
         final TaskModel task = tasks[index];
@@ -97,10 +130,7 @@ class _TaskListPageState extends State<TaskListPage> {
           title: Text(task.title)
         );
       }
-    ),
-    ),
-  ],
-  );
+    ); 
 
   IconButton listItemTrailingWidget(int index) {
     return IconButton(
@@ -121,13 +151,14 @@ class _TaskListPageState extends State<TaskListPage> {
             });
           },
          icon: Icon(
-                      task.done ? Icons.check_circle
-                      : Icons.flaky_sharp,
-                      color: task.done ? Colors.green 
-                      : Colors.red,
-                    ), );
-  }
-}
+                    task.done ? Icons.check_circle
+                    : Icons.flaky_sharp,
+                    color: task.done ? Colors.green 
+                    : Colors.red,
+                  ), 
+            );
+      }
+    }
 
 class TaskModel{
   String title;
