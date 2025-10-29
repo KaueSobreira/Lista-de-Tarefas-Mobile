@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const TaskApp());
@@ -26,6 +27,8 @@ class TaskListPage extends StatefulWidget {
 
 //Classe Responsável por implementar o gerenciamento do Estado da página "TaskListPage"
 class _TaskListPageState extends State<TaskListPage> {
+  String? _userName;
+
   final List<TaskModel> tasks = [
     TaskModel(title: "Preparar conteúdo da Aula"),
     TaskModel(title: "Jogar Cszin"),
@@ -39,6 +42,70 @@ class _TaskListPageState extends State<TaskListPage> {
       body: taskAppBody()
     );
 
+  @override
+  void initState() {
+    super.initState();
+
+
+    _initPreferences();
+  }
+
+  Future<void> _initPreferences()  async {
+    final prefs =  await SharedPreferences.getInstance();
+    
+    // prefs.remove("local_user");
+
+    if (prefs.containsKey("local_user")) {
+      setState(() {
+        _userName = prefs.getString("local_user");
+      });
+    } else {
+      showSetUserDialog();
+    }
+  }
+
+  // Metodo Responsavel por exibir uma caixa de dialog para usuario informar seu nome
+  void showSetUserDialog() {
+    TextField textFieldUserName = TextField(
+      controller: TextEditingController() ,
+      decoration: InputDecoration(hintText: "Coloque seu Nome"),
+    );
+
+    showDialog(
+      context: context,
+      barrierDismissible: false, 
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Bem-Vindo!!"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              textFieldUserName,
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                String userName = textFieldUserName.controller!.text;
+                if (userName.isEmpty) return;
+
+                final prefs =  await SharedPreferences.getInstance();
+
+                await prefs.setString("local_user", userName);
+
+
+                setState(() {
+                  _userName =  userName;
+                  Navigator.of(context).pop();
+                });
+              }, 
+              child: Text("Salvar")
+            ),
+          ],
+        );
+      }
+    );
+  }
 
 
   //Metodo responsabel por criar o AppBar da Pagina Lista de Tarefas
@@ -90,8 +157,10 @@ class _TaskListPageState extends State<TaskListPage> {
     children: [
         // dashboard
         tasksDashboard(),
-        Expanded(child: tasksListView(),
-      ),
+        Expanded(
+          child: tasksListView(),
+        ),
+      taskFooterBar(),
     ],
   );
 
@@ -117,7 +186,7 @@ class _TaskListPageState extends State<TaskListPage> {
           ),
         ),
       ),
-    ],
+    ],  
   );
 
   Widget tasksListView() => ListView.builder(
@@ -157,6 +226,18 @@ class _TaskListPageState extends State<TaskListPage> {
                     : Colors.red,
                   ), 
             );
+      }
+      
+      Widget taskFooterBar() {
+        return Container(
+          padding: EdgeInsets.only(left: 16),
+          height: 40.00,
+          alignment: Alignment.topLeft,
+          child: Text(
+            "Usuario: ${_userName ?? "Desconhecido"}",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          ),
+        );
       }
     }
 
