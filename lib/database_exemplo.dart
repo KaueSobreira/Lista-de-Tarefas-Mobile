@@ -30,6 +30,27 @@ void main() async {
       );
     }
 
+    Future<void> atualizarPet(Pet pet) async {
+      final db =  await database;
+
+      await db.update(
+        "pets", 
+        pet.toMap(),
+        where: "id = ?",
+        whereArgs: [pet.id]
+      );
+    }
+
+    Future<void> deletarPet(int id) async {
+      final db =  await database;
+
+      await db.delete(
+        "pets", 
+        where: "id = ?",
+        whereArgs: [id]
+      );
+    }
+
     Future<List<Pet>> recuperaTodosPets() async {
       final db = await database;
       final List<Map<String, Object?>> mapPets = await db.query("pets");
